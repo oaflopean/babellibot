@@ -47,13 +47,13 @@ app = Flask(__name__)
 
 login = LoginManager(app)
 login.login_view = 'login'
-app.config['SQLALCHEMY_DATABASE_URI']="postgresql://doadmin:t264wg0yfx9d6sf7@copy-com1234-do-user-4689509-0.db.ondigitalocean.com:25060/cp-admin?sslmode=require"
+app.config['SQLALCHEMY_DATABASE_URI']="Secret"
 app.config['STATIC_FOLDER']='static/'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 OAUTH2_CLIENT_ID = "619043497470590997"
-OAUTH2_CLIENT_SECRET = "0lvNMyaWMXrjEHWIk6KybP4cw9_SDx9t"
+OAUTH2_CLIENT_SECRET = "Secret"
 OAUTH2_REDIRECT_URI = 'http://oaflopean.pythonanywhere.com/callback'
 
 API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
@@ -101,7 +101,7 @@ def push():
                 reply= content.description
                 return reply
             else:
-                reddit = praw.Reddit(client_id='FCBZa-yDqRLNag', client_secret="ggD5MpCO7cQxbScgXaNmNydxPkk", password='AptCmx4$', user_agent='Copypasta', username="caesarnaples2")
+                reddit = praw.Reddit(client_id='FCBZa-yDqRLNag', client_secret="secret", password='secret', user_agent='Copypasta', username="caesarnaples2")
                 for submission in reddit.subreddit(key).new():
 
                     if request.args.get("yes"):
