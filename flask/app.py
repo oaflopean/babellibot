@@ -47,7 +47,7 @@ app = Flask(__name__)
 
 login = LoginManager(app)
 login.login_view = 'login'
-app.config['SQLALCHEMY_DATABASE_URI']="Secret"
+app.config['SQLALCHEMY_DATABASE_URI']="postgresql://doadmin:yvga5z7c6g2py29n@copypub-co-do-user-1350609-0.db.ondigitalocean.com:25060/defaultdb?sslmode=require"
 app.config['STATIC_FOLDER']='static/'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
