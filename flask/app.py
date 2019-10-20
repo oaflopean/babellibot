@@ -4,6 +4,7 @@ import requests
 import logging.config
 from caesarcipher import CaesarCipher
 import os
+import re
 
 from flask import g, session, jsonify, Markup
 from requests_oauthlib import OAuth2Session
@@ -33,6 +34,8 @@ from rake_nltk import Rake
 from wtforms.validators import DataRequired
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
+
 from flask_login import LoginManager
 from flask_login import current_user, login_user
 from werkzeug.urls import url_parse
@@ -117,7 +120,7 @@ def push():
             book.author = form2.author.data
             book.description = form2.description.data
             try:
-                book.username = current_user.username
+                book.username = "caesarnaples2"
             except AttributeError:
                 book.username = "caesarnaples2"
             s = "abcdefghijklmnopqrstuvwxyz"
@@ -169,11 +172,11 @@ def push():
                 newt="<br><br>".join(texts)
                 return render_template_string(Markup(newt))
         else:
-            content = Books.query.filter_by().order_by(Books.id.desc()).all()
+            content = Books.query.filter_by(username="caesarnaples2").all()
             string_response =  "<html>{%include 'header.html'%}<body>{%include 'books.html'%}"
             for box in content:
-                string_response = string_response +"<h3>" + box.title + "</h3>"
-                string_response = string_response +"<h4>"+ box.author + "</h4><br><big>Key= <a href='/?key="+ box.uri+"'>"+box.uri+ "</big></a><br>"
+                string_response = string_response +"<h3>name: " + box.title + "</h3>"
+                string_response = string_response +"<br><big>keyname: <a href='/?key="+ box.uri+"'>"+box.uri+ "</big></a><br>url:"
                 string_response = string_response + box.description.replace('\n', "<br>").replace("{","").replace("}","")
             return render_template_string(string_response+"</html></body>", form2=form2)
 
