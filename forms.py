@@ -62,10 +62,10 @@ class RegistrationAppForm(FlaskForm):
 	        raise ValidationError('Please use a different email address.')
 
 class Titles(FlaskForm):
-    title=StringField('title:', validators=[DataRequired()])
-    author=StringField('author:', validators=[DataRequired()])
-    description=TextAreaField('description:')
-    submit=SubmitField('Submit')
+    title=StringField('name:', validators=[DataRequired()])
+    author=StringField('key:', validators=[DataRequired()])
+    description=TextAreaField('url:')
+    submit=SubmitField('Enter')
 class Chapters(Form):
     title=StringField('title:', validators=[DataRequired()])
     text=StringField('text', validators=[DataRequired()])

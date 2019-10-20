@@ -70,6 +70,7 @@ from models import User, Post, Bots, Result, Books,  RedditPost, Subreddits
 #@app.route('/<method>/<key>')
 def hello_world(method, key):
     urls=[]
+
     for url_list in app.url_map.iter_rules():
         urls.append(url_list.rule)
         for abc in range(26):
@@ -92,69 +93,63 @@ def hello_world(method, key):
 @app.route('/?key=<key>', methods=['GET', 'POST']) #allow both GET and POST requests
 @app.route('/', methods=['GET', 'POST'])
 def push():
+    form2 = Titles()
+
     texts=[]
-    if request.method == 'POST':
-        reply=""
-        if request.args.get("key"):
-            key=request.args.get("key")
+    if form2.validate_on_submit():
+        book = Books()
+        book.title = form2.title.data
+        book.author = form2.author.data
+        book.description = form2.description.data
+        try:
+            book.username = "far_out_flan2"
+        except AttributeError:
+            book.username = "far_out_flan2"
+        s = "abcdefghijklmnopqrstuvwxyzACDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        passlen = 30
+        book.uri = "".join(random.sample(s, passlen))
 
-            count=Books.query.filter_by(uri=key).count()
-            if count>0:
-                content=Books.query.filter_by(uri=key).first()
-                reply= content.description
-                return reply
-            else:
-                reddit = praw.Reddit(client_id='FCBZa-yDqRLNag', client_secret="secret", password='secret', user_agent='Copypasta', username="caesarnaples2")
-                for submission in reddit.subreddit(key).new():
+        kw = book.description
+        title = book.title
+        author = book.author
+        client_id="GIsPYS_nLIS2Og"
+        secret = "pytvKc3PHjebQIhOaOKc88PqRxI"
+        password = "99burning9$$"
+        username = "far_out_flan"
+        reddit = praw.Reddit(client_id=client_id,
+                             client_secret=secret, password=password,
+                             user_agent='Copypasta', username=username)
 
-                    if request.args.get("yes"):
-                        reply=reply+" " + submission.title+" "
-                    else:
-                        reply=reply+" " + submission.selftext+" "
-                return reply
+        reddit_url = "http://www.reddit.com/r/astrapocalypse"
+
+        post = RedditPost(uri=book.uri, reddit_url=reddit_url, title=book.title, body=book.description,
+                          username=book.username)
+        book.reddit_url = reddit_url
+        db.session.add(post)
+        db.session.commit()
+        db.session.add(book)
+        db.session.commit()
+        return redirect("/")
+
+    elif request.args.get("key"):
+        key=request.args.get("key")
+
+        count=Books.query.filter_by(uri=key).count()
+        if count>0:
+            content=Books.query.filter_by(uri=key).first()
+            reply= content.description
+            return reply
+        else:
+            reddit = praw.Reddit(client_id='FCBZa-yDqRLNag', client_secret="secret", password='secret', user_agent='Copypasta', username="caesarnaples2")
+            for submission in reddit.subreddit(key).new():
+
+                if request.args.get("yes"):
+                    reply=reply+" " + submission.title+" "
+                else:
+                    reply=reply+" " + submission.selftext+" "
+            return reply
     else:
-        form2 = Titles()
-        if form2.validate_on_submit():
-            book = Books()
-            book.title = form2.title.data
-            book.author = form2.author.data
-            book.description = form2.description.data
-            try:
-                book.username = "caesarnaples2"
-            except AttributeError:
-                book.username = "caesarnaples2"
-            s = "abcdefghijklmnopqrstuvwxyz"
-            passlen = 12
-            book.uri = "".join(random.sample(s, passlen))
 
-            kw = book.description
-            title = book.title
-            author = book.author
-            this_bot = Bots.query.filter_by(username="caesarnaples2").first()
-            try:
-                client_id = this_bot.client_id
-            except AttributeError:
-                return redirect("register/app")
-            secret = this_bot.secret
-            password = this_bot.password
-            username = this_bot.username
-            reddit = praw.Reddit(client_id=client_id,
-                                 client_secret=secret, password=password,
-                                 user_agent='Copypasta', username="caesarnaples2")
-
-            try:
-                reddit_url = reddit.subreddit('publishcopypasta').name
-
-                post = RedditPost(uri=book.uri, reddit_url=reddit_url, title=book.title, body=book.description,
-                                  username=book.username)
-                book.reddit_url = reddit_url
-                db.session.add(post)
-                db.session.commit()
-                db.session.add(book)
-                db.session.commit()
-            except KeyError:
-                print("error on db commit")
-            return redirect(url_for(pod()))
         if request.args.get("key"):
             key=request.args.get("key")
             count=Books.query.filter_by(uri=key).count()
@@ -172,12 +167,12 @@ def push():
                 newt="<br><br>".join(texts)
                 return render_template_string(Markup(newt))
         else:
-            content = Books.query.filter_by(username="caesarnaples2").all()
+            content = Books.query.filter_by(username="far_out_flan2").all()
             string_response =  "<html>{%include 'header.html'%}<body>{%include 'books.html'%}"
             for box in content:
                 string_response = string_response +"<h3>name: " + box.title + "</h3>"
-                string_response = string_response +"<br><big>keyname: <a href='/?key="+ box.uri+"'>"+box.uri+ "</big></a><br>url:"
-                string_response = string_response + box.description.replace('\n', "<br>").replace("{","").replace("}","")
+                string_response = string_response +"<br><big>keyname: <a href='/?key="+ box.uri+"'>"+box.uri+ "</big></a><br>url:<a href='"+box.description+"'>"
+                string_response = string_response + box.description+"</a>"
             return render_template_string(string_response+"</html></body>", form2=form2)
 
 @app.route("/pod", methods=['GET', 'POST'])
