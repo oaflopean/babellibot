@@ -137,7 +137,7 @@ def push():
         count=Books.query.filter_by(uri=key).count()
         if count>0:
             content=Books.query.filter_by(uri=key).first()
-            reply= content.description
+            reply= content.author
             return reply
         else:
             reddit = praw.Reddit(client_id='FCBZa-yDqRLNag', client_secret="secret", password='secret', user_agent='Copypasta', username="caesarnaples2")
