@@ -42,7 +42,7 @@ Mako==1.1.0
 MarkupSafe==1.1.1
 mongoengine==0.18.2
 networkx==2.2
-nltk==3.4
+nltk==3.4.5
 numpy==1.16.2
 openapi-spec-validator==0.2.6
 pathlib==1.0.1
