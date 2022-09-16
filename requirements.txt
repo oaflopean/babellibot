@@ -38,7 +38,7 @@ Jinja2==2.10
 jmespath==0.9.4
 jsonschema==2.6.0
 lxml==4.3.0
-Mako==1.1.0
+Mako==1.2.2
 MarkupSafe==1.1.1
 mongoengine==0.18.2
 networkx==2.2
